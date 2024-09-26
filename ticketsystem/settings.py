@@ -9,8 +9,13 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 
 from pathlib import Path
+
+import environ
+environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,8 +81,12 @@ WSGI_APPLICATION = 'ticketsystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+      'ENGINE': 'django.db.backends.postgresql',
+      'NAME': 'ticketsystem',
+      'USER': os.environ['DB_USER'],
+      'PASSWORD': os.environ['DB_PW'],
+      'HOST': os.environ['DB_HOST'],
+      'PORT': '5432',
     }
 }
 
@@ -122,3 +131,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Redirect to this URL after a successful login
+LOGIN_REDIRECT_URL = '/accounts/'  # or any other URL you want to send users to
+
+# Redirect to this URL when an unauthenticated user tries to access a login-protected view
+LOGIN_URL = '/login/'  # The URL for your login page
